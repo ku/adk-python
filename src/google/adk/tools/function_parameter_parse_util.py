@@ -27,12 +27,12 @@ from google.genai import types
 import pydantic
 
 _py_builtin_type_to_schema_type = {
-    str: types.Type.STRING,
-    int: types.Type.INTEGER,
-    float: types.Type.NUMBER,
-    bool: types.Type.BOOLEAN,
-    list: types.Type.ARRAY,
-    dict: types.Type.OBJECT,
+    "str": types.Type.STRING,
+    "int": types.Type.INTEGER,
+    "float": types.Type.NUMBER,
+    "bool": types.Type.BOOLEAN,
+    "list": types.Type.ARRAY,
+    "dict": types.Type.OBJECT,
 }
 
 logger = logging.getLogger(__name__)
@@ -41,6 +41,9 @@ logger = logging.getLogger(__name__)
 def _is_builtin_primitive_or_compound(
     annotation: inspect.Parameter.annotation,
 ) -> bool:
+  # when the code is run by adk, annotaion contains string instead of class.
+  if inspect.isclass(annotation):
+    annotation = annotation.__name__
   return annotation in _py_builtin_type_to_schema_type.keys()
 
 
